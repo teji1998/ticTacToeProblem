@@ -8,6 +8,9 @@ LENGTH_OF_GRID=9
 #Declaring an array
 declare -a board
 
+#declaring an variable
+shiftChange=0
+
 #Function for resetting the board
 boardReset()
 {
@@ -73,11 +76,22 @@ gameWinner()
 {
 	if [ $player -eq 1 ]
 	then
-		echo "You won."
+		wonByPlayer=1
 	else
-		echo "Computer won."
+		wonByComputer=1
 	fi
 }
+
+winner(){
+	if [[ $wonByPlayer -eq 1 ]]
+	then
+		echo "player won the game"
+	elif [[ $wonByComputer -eq 1 ]]
+	then
+		echo "player won the game"
+	fi
+}
+
 
 #To display the board
 displayBoard()
@@ -113,19 +127,27 @@ findWinner()
 #chance of computer
 computerChance()
 {
-	
-	option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
-	while [ ${board[ $option ]} == [-] ]
-	do
+	findComputerWin
+
+	if [ $shiftChange -eq 0 ]
+	then
+		findPlayerWin
+
+	fi
+	if [ $shiftChange -eq 0 ]
+	then
 		option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
-	done
-	computerPosition=$option
-	echo "Position of computer is : " $computerPosition
-	board[$computerPosition]=$computerLetter
-	echo The letter chosen by computer is ${board[$computerPosition]}
-	
+		while [ ${board[ $option ]} == [-] ]
+		do
+			option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
+		done
+		computerPosition=$option
+		echo "Position of computer is : " $computerPosition
+		board[$computerPosition]=$computerLetter			echo The letter chosen by computer is ${board[$computerPosition]}
+	fi
 	
 }
+
 #Chance of player
 playerChance()
 {
@@ -160,6 +182,52 @@ playGame()
 			findWinner
 			player=1
 		fi
+		winner
 	done
+
+}
+
+#block computer move
+findComputerWin()
+if [[ $position -le LENGTH_OF_GRID ]] 
+then
+   	if [[ ${board[$position]} == $position ]]
+        then
+      		board[$i]=$computerLetter
+        	 findWinner
+        	 if [[ $wonByComputer == 1 ]]
+        	 then
+         		positionChange=1
+               		wonByComputer=0
+            		echo "Computer Chose:" $position
+			break;
+         	  else
+            		board[$position] == $position
+			
+          	  fi
+	 fi
+	position=$((position+1))
+fi
+
+#Function to block user
+function findPlayerWin()
+{
+	if [[ $position -le $GRID_OF_LENGTH  ]]
+        then
+   		if [[ ${board[$position]} == $position ]]
+  		then
+   			board[$position]=$playerLetter
+      			findWinner
+      			if [[ $wonByPlayer == 1 ]]
+      			then
+         			positionChange=1
+         			wonByPlayer=0
+         			board[$position]=$computerLetter
+			else	
+				board[$position] = $position 
+     			 fi
+   		 fi
+		position=$((position+1))
+        fi
 }
 playGame
