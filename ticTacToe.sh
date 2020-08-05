@@ -101,7 +101,7 @@ findWinner()
 	   ([[ ${board[7]} == ${board[5]} && ${board[5]} == ${board[3]} ]])
 	then
 		gameWinner
-	elif [[  ! ${board[@]} =~ [-] ]]
+	elif [[  ! ${board[*]} =~ [-] ]]
  	then
 		echo "Game ends.Its a tie."
 	else
@@ -109,7 +109,21 @@ findWinner()
 	fi
 }	
 
+#chance of computer
+computerChance()
+{
+	option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
+	while [ ${board[ $option ]} == [-] ]
+	do
+		option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
+	done
+	computerPosition=$option
+	echo "Position of computer is : " $computerPosition
+	board[$computerPosition]=$computerLetter
+	echo The letter chosen by computer is ${board[$computerPosition]}
+}
 boardReset
 playFirstToss
 displayBoard
 findWinner
+computerChance
