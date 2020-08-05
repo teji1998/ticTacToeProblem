@@ -55,9 +55,11 @@ playFirstToss()
 	toss=$(( $RANDOM % 2 ))
 	if [ $toss -eq 1 ]
 	then
+		player=1
 		echo "You have won the toss.You will play first."
 		choosePlayerLetter
 	else
+		player=0
 		echo "Computer has won the toss.Computer will play first."
 		chooseComputerLetter
 	fi
@@ -75,6 +77,39 @@ displayBoard()
 	echo " ${board[7]} | ${board[8]} | ${board[9]} "
 }
 
+#To declare the winner
+gameWinner()
+{
+	if [ $player -eq 1 ]
+	then
+		echo "You won."
+	else
+		echo "Computer won."
+	fi
+}
+
+#To check the conditions to decide the winner
+findWinner()
+{
+	if ([[ ${board[1]} == ${board[2]} && ${board[2]} == ${board[3]} ]]) ||
+	   ([[ ${board[4]} == ${board[5]} && ${board[5]} == ${board[6]} ]]) ||
+	   ([[ ${board[7]} == ${board[8]} && ${board[8]} == ${board[9]} ]]) ||
+	   ([[ ${board[1]} == ${board[4]} && ${board[4]} == ${board[7]} ]]) ||
+	   ([[ ${board[2]} == ${board[5]} && ${board[5]} == ${board[8]} ]]) ||
+       	   ([[ ${board[3]} == ${board[6]} && ${board[6]} == ${board[9]} ]]) ||
+	   ([[ ${board[1]} == ${board[5]} && ${board[5]} == ${board[9]} ]]) ||
+	   ([[ ${board[7]} == ${board[5]} && ${board[5]} == ${board[3]} ]])
+	then
+		gameWinner
+	elif [[  ! ${board[@]} =~ [-] ]]
+ 	then
+		echo "Game ends.Its a tie."
+	else
+		echo "Continue the game."
+	fi
+}	
+
 boardReset
 playFirstToss
 displayBoard
+findWinner
