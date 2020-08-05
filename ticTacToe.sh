@@ -4,6 +4,7 @@ echo "WELCOME TO THE TIC-TAC-TOE GAME."
 
 #Length of grid
 LENGTH_OF_GRID=9
+
 #Declaring an array
 declare -a board
 
@@ -67,16 +68,6 @@ playFirstToss()
 	echo "Letter chosen by computer is : $computerLetter"
 }
 
-#To display the board
-displayBoard()
-{
-	echo " ${board[1]} | ${board[2]} | ${board[3]} "
-	echo " ----+-----+---- "
-	echo " ${board[4]} | ${board[5]} | ${board[6]} "
-        echo " ----+-----+---- "
-	echo " ${board[7]} | ${board[8]} | ${board[9]} "
-}
-
 #To declare the winner
 gameWinner()
 {
@@ -87,6 +78,15 @@ gameWinner()
 		echo "Computer won."
 	fi
 }
+
+#To display the board
+displayBoard()
+{
+	echo " ${board[1]} | ${board[2]} | ${board[3]} "
+	echo " ${board[4]} | ${board[5]} | ${board[6]} "
+	echo " ${board[7]} | ${board[8]} | ${board[9]} "
+}
+
 
 #To check the conditions to decide the winner
 findWinner()
@@ -104,6 +104,7 @@ findWinner()
 	elif [[  ! ${board[*]} =~ [-] ]]
  	then
 		echo "Game ends.Its a tie."
+		gameStatus=1;
 	else
 		echo "Continue the game."
 	fi
@@ -112,6 +113,7 @@ findWinner()
 #chance of computer
 computerChance()
 {
+	
 	option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
 	while [ ${board[ $option ]} == [-] ]
 	do
@@ -121,9 +123,43 @@ computerChance()
 	echo "Position of computer is : " $computerPosition
 	board[$computerPosition]=$computerLetter
 	echo The letter chosen by computer is ${board[$computerPosition]}
+	
+	
 }
-boardReset
-playFirstToss
-displayBoard
-findWinner
-computerChance
+#Chance of player
+playerChance()
+{
+	read -p "Enter the position you want to add the letter : " temp
+	while [[ ! ${board[$temp]} =~ [-]  ]]  
+	do
+		echo "The position you choose is already occupied.Choose another spot"
+	read -p "Again choose the position to add the letter $playerLetter: " temp
+	done
+	board[$temp]=$playerLetter
+	echo "The letter chosen by player is ${board[$temp]}"
+	displayBoard
+}
+
+#To play the game
+playGame()
+{
+	boardReset
+	playFirstToss
+	gameStatus=0
+	while [ $gameStatus -ne 1 ]
+	do
+		displayBoard	
+		if [ $player -eq 1 ]
+		then
+			playerChance
+			findWinner
+			player=0
+			
+		else
+			computerChance
+			findWinner
+			player=1
+		fi
+	done
+}
+playGame
