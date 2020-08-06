@@ -317,4 +317,34 @@ randomPosition()
 		echo The letter chosen by computer is ${board[$computerPosition]}
 		displayBoard
 }
+choice()
+{
+	echo " enter your choice:1 for playing game and 2 for ending game"
+	read -p "Option choosed:" option
+	case $option in
+		1)
+			playGame
+			;;
+		2)
+			echo "Game over"
+			break
+			;;
+		*)
+			echo "invalid option"
+	esac
+}
+choice
+
+
+
+
+
+
+
+
+
+
+
+
+
 playGame
