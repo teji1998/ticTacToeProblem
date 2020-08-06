@@ -136,6 +136,11 @@ computerChance()
 	fi
 	if [ $shiftChange -eq 0 ]
 	then
+		centerPosition
+	fi
+
+	if [ $shiftChange -eq 0 ]
+	then
 		option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
 		while [[ ($(( ${board["$option"]} )) -eq $(($playerLetter))) || ($(( ${board["$option"]} )) -eq  $(($computerLetter))) ]]
 		do
@@ -293,4 +298,18 @@ cornerPosition()
 		fi
    	done
 }
+#Function to get center position
+centerPosition()
+{
+	if [[ $position = 5 ]]
+   	then
+		echo $wonByComputer
+		checkWin
+		wonByComputer=0
+     		shiftChange=1
+     		board[$position]=$computerLetter
+ 	 	break
+   	fi
+}
+	
 playGame
