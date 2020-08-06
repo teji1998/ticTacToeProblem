@@ -244,7 +244,10 @@ function findPlayerWin()
         fi
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> UC10_centerFunction
 #Function to get available corner
 cornerPosition()
 {
@@ -272,15 +275,19 @@ centerPosition()
 {
 	if [[ $position = 5 ]]
    	then
-		echo $wonByComputer
-		checkWin
-		wonByComputer=0
-     		shiftChange=1
-     		board[$position]=$computerLetter
- 	 	break
+		if [[ ${board[5]} != $(($computerLetter)) || ${board[5]} != $(($playerLetter)) ]]
+		then
+			echo $wonByComputer
+			checkWin
+			wonByComputer=0
+     			shiftChange=1
+     			board[$position]=$computerLetter
+ 	 		break
+		fi
    	fi
 }
 	
+<<<<<<< HEAD
 #Random Position
 randomPosition()
 {
@@ -329,3 +336,6 @@ playGame
 =======
 playGame
 >>>>>>> UC9_cornerFunction
+=======
+playGame
+>>>>>>> UC10_centerFunction
