@@ -10,15 +10,29 @@ declare -a board
 
 #declaring an variable
 shiftChange=0
+gameStatus=0
+wonByComputer=0
+wonByPlayer=0
+turn=1
+
 
 #Function for resetting the board
 boardReset()
 {
 	for (( position=1 ; position<=LENGTH_OF_GRID ; position++ ))
 	do
-		board[$position]=" - "
+		board[$position]=$position
 	done
 	echo "The resetting of board is done."
+	displayBoard
+}
+
+#To display the board
+displayBoard()
+{
+	echo " ${board[1]} | ${board[2]} | ${board[3]} "
+	echo " ${board[4]} | ${board[5]} | ${board[6]} "
+	echo " ${board[7]} | ${board[8]} | ${board[9]} "
 }
 
 #To choose X or 0 by player
@@ -80,25 +94,7 @@ gameWinner()
 	else
 		wonByComputer=1
 	fi
-}
-
-winner(){
-	if [[ $wonByPlayer -eq 1 ]]
-	then
-		echo "player won the game"
-	elif [[ $wonByComputer -eq 1 ]]
-	then
-		echo "player won the game"
-	fi
-}
-
-
-#To display the board
-displayBoard()
-{
-	echo " ${board[1]} | ${board[2]} | ${board[3]} "
-	echo " ${board[4]} | ${board[5]} | ${board[6]} "
-	echo " ${board[7]} | ${board[8]} | ${board[9]} "
+	gameStatus=1
 }
 
 
@@ -115,7 +111,7 @@ findWinner()
 	   ([[ ${board[7]} == ${board[5]} && ${board[5]} == ${board[3]} ]])
 	then
 		gameWinner
-	elif [[  ! ${board[*]} =~ [-] ]]
+	elif [[ ${board[1]} != 1 && ${board[2]} != 2 && ${board[3]} != 3 && ${board[4]} != 4 && ${board[5]} != 5 && ${board[6]} != 6 && ${board[7]} != 7 && ${board[8]} != 8 && ${board[9]} != 9  ]]
  	then
 		echo "Game ends.Its a tie."
 		gameStatus=1;
@@ -127,23 +123,26 @@ findWinner()
 #chance of computer
 computerChance()
 {
+	
 	findComputerWin
 
 	if [ $shiftChange -eq 0 ]
 	then
 		findPlayerWin
+	fi	
 
-	fi
 	if [ $shiftChange -eq 0 ]
 	then
 		option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
-		while [ ${board[ $option ]} == [-] ]
+		while [[ ($(( ${board["$option"]} )) -eq $(($playerLetter))) || ($(( ${board["$option"]} )) -eq  $(($computerLetter))) ]]
 		do
 			option=$(( ($RANDOM % $LENGTH_OF_GRID) + 1 ))
 		done
 		computerPosition=$option
 		echo "Position of computer is : " $computerPosition
-		board[$computerPosition]=$computerLetter			echo The letter chosen by computer is ${board[$computerPosition]}
+		board[$computerPosition]=$computerLetter			
+		echo The letter chosen by computer is ${board[$computerPosition]}
+		displayBoard
 	fi
 	
 }
@@ -152,22 +151,33 @@ computerChance()
 playerChance()
 {
 	read -p "Enter the position you want to add the letter : " temp
-	while [[ ! ${board[$temp]} =~ [-]  ]]  
+	while [[ ($(( ${board["$temp"]} )) -eq $(($computerLetter))) ||  ($(( ${board["$temp"]} )) -eq $(($playerLetter))) ]]  
 	do
 		echo "The position you choose is already occupied.Choose another spot"
 	read -p "Again choose the position to add the letter $playerLetter: " temp
 	done
 	board[$temp]=$playerLetter
 	echo "The letter chosen by player is ${board[$temp]}"
-	displayBoard
 }
 
+#declare winner
+winner()
+{
+if [[ $wonByComputer == 1 ]]
+      then
+         displayBoard
+         echo "game won by computer"
+      elif [[ $wonByPlayer == 1 ]]
+      then
+         displayBoard
+         echo "game won player"
+      fi
+}
 #To play the game
 playGame()
 {
 	boardReset
 	playFirstToss
-	gameStatus=0
 	while [ $gameStatus -ne 1 ]
 	do
 		displayBoard	
@@ -189,15 +199,15 @@ playGame()
 
 #block computer move
 findComputerWin()
-if [[ $position -le LENGTH_OF_GRID ]] 
+if [[ $position -le $LENGTH_OF_GRID && $turn -le $LENGTH_OF_GRID ]] 
 then
    	if [[ ${board[$position]} == $position ]]
         then
-      		board[$i]=$computerLetter
+      		board[$position]=$computerLetter
         	 findWinner
         	 if [[ $wonByComputer == 1 ]]
         	 then
-         		positionChange=1
+         		shiftChange=1
                		wonByComputer=0
             		echo "Computer Chose:" $position
 			break;
@@ -207,12 +217,13 @@ then
           	  fi
 	 fi
 	position=$((position+1))
+	turn=$((turn+ 1 ))
 fi
 
-#Function to block user
+#Function to block player
 function findPlayerWin()
 {
-	if [[ $position -le $GRID_OF_LENGTH  ]]
+	if [[ $position -le $LENGTH_OF_GRID && $turn -le $LENGTH_OF_GRID ]]
         then
    		if [[ ${board[$position]} == $position ]]
   		then
@@ -220,7 +231,7 @@ function findPlayerWin()
       			findWinner
       			if [[ $wonByPlayer == 1 ]]
       			then
-         			positionChange=1
+         			shiftChange=1
          			wonByPlayer=0
          			board[$position]=$computerLetter
 			else	
@@ -228,6 +239,8 @@ function findPlayerWin()
      			 fi
    		 fi
 		position=$((position+1))
+		turn=$(( turn + 1 ))
         fi
 }
+
 playGame
