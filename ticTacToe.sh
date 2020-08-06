@@ -195,7 +195,7 @@ playGame()
 		fi
 		winner
 	done
-
+	choice
 }
 
 #block computer move
