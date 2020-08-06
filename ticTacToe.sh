@@ -253,30 +253,6 @@ function findPlayerWin()
         fi
 }
 
-
-#Function to get available corner
-function getCorner()
-{
-	for ((i=1; i<=9; i=$(( i + 2)) ))
-   do
-	   if [[ $i = 5 ]]
-   	then
-   		continue
-   	else
-			if [[ ${positions[$i]} == $i ]]
-   		then
-				echo $wonByComputer
-				findWinner
-				wonByComputer=0
-     			shiftChange=1
-     			board[$position]=$computerLetter
-   	  		break
-   		fi
-		fi
-   done
-}
-
-
 #Function to get available corner
 cornerPosition()
 {
@@ -303,12 +279,15 @@ centerPosition()
 {
 	if [[ $position = 5 ]]
    	then
-		echo $wonByComputer
-		checkWin
-		wonByComputer=0
-     		shiftChange=1
-     		board[$position]=$computerLetter
- 	 	break
+		if [[ ${board[5]} != $(($computerLetter)) || ${board[5]} != $(($playerLetter)) ]]
+		then
+			echo $wonByComputer
+			checkWin
+			wonByComputer=0
+     			shiftChange=1
+     			board[$position]=$computerLetter
+ 	 		break
+		fi
    	fi
 }
 	
