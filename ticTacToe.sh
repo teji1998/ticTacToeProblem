@@ -204,7 +204,7 @@ playGame()
 
 #block computer move
 findComputerWin()
-if [[ $position -le LENGTH_OF_GRID && $turn -le LENGTH_OF_GRID ]] 
+if [[ $position -le $LENGTH_OF_GRID && $turn -le $LENGTH_OF_GRID ]] 
 then
    	if [[ ${board[$position]} == $position ]]
         then
@@ -225,10 +225,10 @@ then
 	turn=$((turn+ 1 ))
 fi
 
-#Function to block user
+#Function to block player
 function findPlayerWin()
 {
-	if [[ $position -le $GRID_OF_LENGTH && $turn -le LENGTH_OF_GRID ]]
+	if [[ $position -le $LENGTH_OF_GRID && $turn -le $LENGTH_OF_GRID ]]
         then
    		if [[ ${board[$position]} == $position ]]
   		then
@@ -246,29 +246,6 @@ function findPlayerWin()
 		position=$((position+1))
 		turn=$(( turn + 1 ))
         fi
-}
-
-
-#Function to get available corner
-function getCorner()
-{
-	for ((i=1; i<=9; i=$(( i + 2)) ))
-   do
-	   if [[ $i = 5 ]]
-   	then
-   		continue
-   	else
-			if [[ ${positions[$i]} == $i ]]
-   		then
-				echo $wonByComputer
-				findWinner
-				wonByComputer=0
-     			shiftChange=1
-     			board[$position]=$computerLetter
-   	  		break
-   		fi
-		fi
-   done
 }
 
 
