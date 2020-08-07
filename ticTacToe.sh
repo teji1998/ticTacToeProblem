@@ -99,7 +99,7 @@ gameWinner()
 
 
 #To check the conditions to decide the winner
-findWinner()
+winOrTie()
 {
 	if ([[ ${board[1]} == ${board[2]} && ${board[2]} == ${board[3]} ]]) ||
 	   ([[ ${board[4]} == ${board[5]} && ${board[5]} == ${board[6]} ]]) ||
@@ -172,6 +172,7 @@ if [[ $wonByComputer == 1 ]]
          echo "game won player"
       fi
 }
+
 #To play the game
 playGame()
 {
@@ -185,17 +186,22 @@ playGame()
 		if [ $player -eq 1 ]
 		then
 			playerChance
-			findWinner
+			winOrTie
 			player=0
 			
 		else
 			computerChance
-			findWinner
+			winOrTie
 			player=1
 		fi
 		winner
 	done
+<<<<<<< HEAD
 	choice
+=======
+choice
+
+>>>>>>> development
 }
 
 #block computer move
@@ -205,7 +211,7 @@ then
    	if [[ ${board[$position]} == $position ]]
         then
       		board[$position]=$computerLetter
-        	 findWinner
+        	 winOrTie
         	 if [[ $wonByComputer == 1 ]]
         	 then
          		shiftChange=1
@@ -229,7 +235,7 @@ function findPlayerWin()
    		if [[ ${board[$position]} == $position ]]
   		then
    			board[$position]=$playerLetter
-      			findWinner
+      			winOrTie
       			if [[ $wonByPlayer == 1 ]]
       			then
          			shiftChange=1
@@ -246,8 +252,11 @@ function findPlayerWin()
 
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 =======
 >>>>>>> UC10_centerFunction
+=======
+>>>>>>> UC12_playoption
 #Function to get available corner
 cornerPosition()
 {
@@ -270,6 +279,10 @@ cornerPosition()
    	done
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> UC12_playoption
 #Function to get center position
 centerPosition()
 {
@@ -285,9 +298,13 @@ centerPosition()
  	 		break
 		fi
    	fi
+<<<<<<< HEAD
 }
 	
 <<<<<<< HEAD
+=======
+}	
+>>>>>>> UC12_playoption
 #Random Position
 randomPosition()
 {
@@ -302,6 +319,8 @@ randomPosition()
 		echo The letter chosen by computer is ${board[$computerPosition]}
 		displayBoard
 }
+
+#to choose whether to play game or stop
 choice()
 {
 	echo " enter your choice:1 for playing game and 2 for ending game"
@@ -312,7 +331,6 @@ choice()
 			;;
 		2)
 			echo "Game over"
-			break
 			;;
 		*)
 			echo "invalid option"
@@ -320,6 +338,7 @@ choice()
 }
 choice
 
+<<<<<<< HEAD
 
 
 
@@ -341,4 +360,9 @@ playGame
 =======
 playGame
 >>>>>>> UC10_centerFunction
+<<<<<<< HEAD
+>>>>>>> development
+=======
+=======
+>>>>>>> UC12_playoption
 >>>>>>> development
