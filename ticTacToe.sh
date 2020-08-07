@@ -99,7 +99,7 @@ gameWinner()
 
 
 #To check the conditions to decide the winner
-findWinner()
+winOrTie()
 {
 	if ([[ ${board[1]} == ${board[2]} && ${board[2]} == ${board[3]} ]]) ||
 	   ([[ ${board[4]} == ${board[5]} && ${board[5]} == ${board[6]} ]]) ||
@@ -172,6 +172,7 @@ if [[ $wonByComputer == 1 ]]
          echo "game won player"
       fi
 }
+
 #To play the game
 playGame()
 {
@@ -185,16 +186,17 @@ playGame()
 		if [ $player -eq 1 ]
 		then
 			playerChance
-			findWinner
+			winOrTie
 			player=0
 			
 		else
 			computerChance
-			findWinner
+			winOrTie
 			player=1
 		fi
 		winner
 	done
+choice
 
 }
 
@@ -205,7 +207,7 @@ then
    	if [[ ${board[$position]} == $position ]]
         then
       		board[$position]=$computerLetter
-        	 findWinner
+        	 winOrTie
         	 if [[ $wonByComputer == 1 ]]
         	 then
          		shiftChange=1
@@ -229,7 +231,7 @@ function findPlayerWin()
    		if [[ ${board[$position]} == $position ]]
   		then
    			board[$position]=$playerLetter
-      			findWinner
+      			winOrTie
       			if [[ $wonByPlayer == 1 ]]
       			then
          			shiftChange=1
@@ -266,20 +268,23 @@ cornerPosition()
 		fi
    	done
 }
+
 #Function to get center position
 centerPosition()
 {
 	if [[ $position = 5 ]]
    	then
-		echo $wonByComputer
-		checkWin
-		wonByComputer=0
-     		shiftChange=1
-     		board[$position]=$computerLetter
- 	 	break
+		if [[ ${board[5]} != $(($computerLetter)) || ${board[5]} != $(($playerLetter)) ]]
+		then
+			echo $wonByComputer
+			checkWin
+			wonByComputer=0
+     			shiftChange=1
+     			board[$position]=$computerLetter
+ 	 		break
+		fi
    	fi
-}
-	
+}	
 #Random Position
 randomPosition()
 {
@@ -294,6 +299,8 @@ randomPosition()
 		echo The letter chosen by computer is ${board[$computerPosition]}
 		displayBoard
 }
+
+#to choose whether to play game or stop
 choice()
 {
 	echo " enter your choice:1 for playing game and 2 for ending game"
@@ -304,7 +311,6 @@ choice()
 			;;
 		2)
 			echo "Game over"
-			break
 			;;
 		*)
 			echo "invalid option"
@@ -312,16 +318,3 @@ choice()
 }
 choice
 
-
-
-
-
-
-
-
-
-
-
-
-
-playGame
